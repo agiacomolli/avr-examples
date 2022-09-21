@@ -1,0 +1,31 @@
+USEFUL DEFINES AND MAKEFILE
+===========================
+
+This is the same blink with delay example, adding useful defines for common
+register address and values and use the GNU make for build, check and flash to
+target. The GNU make reference manual can be found at
+
+https://www.gnu.org/software/make/manual/make.html
+
+The GNU make uses a Makefile file that map rules (or targets) to commands or
+recipes. Each rule can have prerequisites that are run before each rule.
+Checkout the GNU make reference manual and the Makefile to see what rules this
+example has.
+
+With the make, we can check if we can reach the target with the _check_ rule.
+
+$ make check
+
+To build the project, we can use the _build_ rule.
+
+$ make build
+
+And to flash into target with the binary file contents, the _flash_ rule.
+
+$ make flash
+
+Running the make command without any argument calls the _all_ rule. In this
+example, the _all_ rule is empty and serves only as a placeholder. This rule
+depends on _build_, so the _build_ rule will be executed before the _all_ rule.
+In summary, the _all_ rule has the same effect as _build_ rule.
+
