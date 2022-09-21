@@ -1,0 +1,46 @@
+BLINK ASM
+=========
+
+This will continuously toggle the PC5 pin. Remeber that the microcontroller is
+running with the internal 8 MHz clock and for this example the cycle loop count
+is five. Considering you as a normal human being, It's almost impossible to see
+the LED blinking at naked eye, so I suggest you to use an osciloscope to
+observe the output signal.
+
+All the assembly instructions and the cycles taken can be found on the AVR
+Instruction Set Manual
+
+http://ww1.microchip.com/downloads/en/devicedoc/atmel-0856-avr-instruction-set-manual.pdf
+
+The build process is a two step because for this example we need to see what
+binary data it generates. The first step outputs and ELF file. With objcopy, we
+convert the ELF file to a raw binary format that can be inspect.
+
+$ avr-gcc -Wall -mmcu=atmega328p -nostartfiles blink.S -o blink.elf
+$ avr-objcopy -S -O binary blink.elf blink.bin
+
+We can use hexdump to check the contents of the raw binary file.
+
+$ hexdump -vC blink.bin
+
+We can also disasembly the raw binary file to check the assembly code that was
+generate with the previous build step.
+
+$ avr-objdump -m avr -b binary -D blink.bin
+
+The binary raw file needs to be write to target flash memory in order to run
+our code. We'll use avrdude for all check, read or writes to or from target.
+
+We can check if we can reach the target with avrdude. The command sets the
+target part (m328p) and the programmer (usbasp). This options need to match
+with our hardware.
+
+$ avrdude -b 9600 -p m328p -c usbasp -v
+
+If everything did ok, the output will show some useful target info and we are
+ready to flash the target with the binary file contents. This command sets
+again the target part and the programmer. Also instructs avrdude to write the
+contents of blink.bin file into the flash memory.
+
+$ avrdude -b 9600 -p m328p -c usbasp -e -U flash:w:blink.bin:r
+
