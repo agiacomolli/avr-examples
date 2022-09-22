@@ -1,5 +1,5 @@
 build:
-	avr-gcc -O1 -Wall -mmcu=atmega328p main.c -o main.elf
+	avr-gcc -O1 -Wall -DF_CPU=1000000 -mmcu=atmega328p main.c lcd.c -o main.elf
 	avr-objcopy -S -O binary main.elf main.bin
 
 flash: build
